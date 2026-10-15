@@ -8,6 +8,23 @@ For the project around those clicks, use the community [ITSM Pro VA Quick Start 
 
 The chat client is the Virtual Agent surface. It is not Agent Client Collector.
 
+## Why Virtual Agent
+
+Virtual Agent exists so a repeated request is answered without a person, and so the person who is left gets the work the bot should not finish. If you cannot name which of those you are buying, the plugin list below has nothing to aim at.
+
+The 2020 ITSM Pro quick-start deck, slide 2, groups the case in three. The percentages below are that slide’s citations. They are not a reading from your instance, and “by 2020” is a forecast from that year.
+
+**Agent and bot partnership.** The deck cites 79% for improved agent productivity (businesswire.com) and 65% of users saying a chatbot adds value (Chatbots Magazine). The bot takes the repeatable ask. The agent takes the rest, with the earlier messages still on the interaction.
+
+**The next channel.** The same slide cites 80% of businesses treating chat as part of the business by 2020 (act.com) and 67% expecting chatbots to outperform mobile apps over the following five years (Chatbots Magazine). That is why portal, Now Mobile, and Teams are the same bot on more doors, not three projects.
+
+**Operational impact at ServiceNow.**
+
+- **Incident deflection.** A published topic closes the request in the bot.
+- **Increased productivity.** Agents stop retyping the status check.
+- **Reduced MTTR.** Only if the handoff lands on an available agent. A transfer into an empty queue makes this worse.
+- **Availability, 24×7.** The bot does not keep office hours. The queue behind it still might.
+
 ## 00 · Bare minimum to stand a bot up
 
 You do not design a custom conversation on day one. You need a starting point, one product choice, one portal, and at least one **published** topic. Unpublished topics are invisible.

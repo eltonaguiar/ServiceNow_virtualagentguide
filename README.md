@@ -26,7 +26,7 @@ The **admin** role is required to activate plugins and store applications. A Vir
 
 - **admin** installs Glide Virtual Agent, the ITSM or HR conversations app, Agent Chat, Omni-Experience, Analytics, and Teams or Slack. On a domain-separated instance, do this from the global domain.
 - **virtual_agent_admin** is the bot builder. Designer, greetings, branding, NLU, the portal chat experience, and publish. This role does not activate plugins. Give it to the person who will change topics after go-live, instead of leaving them on admin.
-- **awa_admin** is the routing owner. A handover node only asks to transfer. Advanced Work Assignment decides which queue and which agent get the chat: service channel, queues, assignment rules, capacity, and presence. Path: `All › Advanced Work Assignment`. The person who answers the chat needs **awa_agent**, not awa_admin.
+- **awa_admin** routes the live chat after the bot gives up. When the user asks for a person, or a topic hits **Handover to agent**, the conversation becomes an AWA work item. This role sets the chat service channel, the queues (a password topic can go to a different team than a hardware topic), and the assignment rules. It also sets presence (online, away, busy), skills, and how many chats an agent can hold, so the work item lands only on a qualified agent who is available in Agent Workspace. Path: `All › Advanced Work Assignment`. The person who answers needs **awa_agent**, not awa_admin.
 
 One person who already has admin can do all three. The split matters when the bot builder is not the platform admin, and when the team that staffs live agents is not the team that writes topics.
 
@@ -173,11 +173,15 @@ Three layers have to agree. A topic node alone does not route anyone. The Virtua
 
 ### Give the work a queue
 
+Role: **awa_admin**. The transfer is not finished when the bot says it is connecting you. AWA turns that chat into a work item and offers it only to an agent who is online, has the skill, and still has capacity.
+
 `All › Advanced Work Assignment › Queues`
 
-1. Open the chat queue. The work-item condition must match how interactions are created. They are created in **Work in Progress**. A condition that only matches **New** means agents never see the chat.
-2. On `sys_cs_live_agent_setup.list`, set **ITSM Fulfiller UI** and **Global Fulfiller UI** to **Agent Workspace**, not Connect. Save.
-3. Test twice: a topic that finishes in the bot, and a transfer that lands in Agent Workspace with the prior messages still on the interaction.
+1. Confirm a **chat** service channel exists. A queue with no channel never receives the handoff.
+2. Open the chat queue. Point specialized topics at the right team (passwords to identity, hardware to the desk). The work-item condition must match how interactions are created. They are created in **Work in Progress**. A condition that only matches **New** means agents never see the chat.
+3. Set the assignment rule, agent skills, presence states (online, away, busy), and capacity. An agent at capacity, or marked away, must not receive the next transfer.
+4. On `sys_cs_live_agent_setup.list`, set **ITSM Fulfiller UI** and **Global Fulfiller UI** to **Agent Workspace**, not Connect. Save.
+5. Test twice: a topic that finishes in the bot, and a transfer that lands in Agent Workspace with the prior messages still on the interaction.
 
 ## 08 · Pre-built messaging apps
 

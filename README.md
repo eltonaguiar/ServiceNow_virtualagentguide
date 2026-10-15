@@ -45,6 +45,15 @@ Guided Setup does not install a generic checklist. A short survey reads your ent
 
 `All › Guided Setup › Conversational Interfaces Guided Setup`
 
+### Things to consider before you click through
+
+Answer these on the setup page before you pick Quick or Manual. The page has three tabs: **General Setup**, **Virtual Agent Setup**, and **Agent Chat Setup**. General Setup decides who is in scope, who is allowed to configure it, where users will reach it, and how it should look. The other two tabs ask the same kind of questions for the bot and for live chat. A wrong answer here hides tasks you will need later.
+
+- **What types of agents?** Live agents, Virtual Agent, or both. Virtual only drops the Agent Chat and AWA tasks. Live only drops topic design. Both keeps the handoff path in section 07.
+- **Which roles?** System admin installs the plugins. Virtual Agent admin configures the bot. AWA admin configures the queues. Name the people before the task list appears, or the install stalls on a role nobody holds.
+- **Which channels?** Web portals, ServiceNow Mobile, a supported messaging app (Slack, SMS with Twilio, Teams, Workplace), or a custom channel such as a proprietary chat app. Also decide who has admin access in that third-party app. Install only the channels you named. A custom channel is a build, not a store app.
+- **Look and feel?** Corporate colors, logos and icons, support details such as email and hours, and the conversational lines: greeting, fallback, and closing. Colors and the logo are the branding record. The three lines are setup topics, not branding.
+
 1. Select **Get Started**.
 2. Open **Customize your setup** and select **Configure**.
 3. Answer what kind of bot this is: ITSM, HR, ITBM, Field Service, and whether you also want **Workspace Agent Chat**. The task list drops work for products you did not select.

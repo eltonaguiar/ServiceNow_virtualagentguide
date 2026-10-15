@@ -8,14 +8,24 @@ The chat client is the Virtual Agent surface. It is not Agent Client Collector.
 
 ## 00 · Bare minimum to stand a bot up
 
-You do not design a custom conversation on day one. You need a license, one product choice, the core plugin, one portal, and at least one **published** topic. Unpublished topics are invisible.
+You do not design a custom conversation on day one. You need a starting point, one product choice, one portal, and at least one **published** topic. Unpublished topics are invisible.
 
-1. **License.** Virtual Agent needs ITSM Pro, HRSD Pro, or Enterprise (or the equivalent entitlement). ITSM Standard is Virtual Agent Lite, a smaller bot.
+### Choose the starting point
+
+Not every organization starts the same way. Match the license before you touch a plugin.
+
+**Full Virtual Agent license.** ITSM Pro, HRSD Pro, or Enterprise. The course company Cloud Dimensions is this case. Activate Glide Virtual Agent (`com.glide.cs.chatbot`) and follow the stages below.
+
+**ITSM Standard, no full license.** Virtual Agent Lite is already on the instance (`com.glide.cs.chatbot.lite`). Do not install the full plugin. In Designer, review the prebuilt ITSM conversations, duplicate the ones you will use, and publish them.
+
+Lite is a smaller product: NLU is limited, and there is no Conversational Analytics dashboard. It is still a working chat you can put on a portal, and it is the base you upgrade from when the full license arrives.
+
+1. **Confirm which bot you have.** `All › System Definition › Plugins`. If Glide Virtual Agent is missing and Lite is active, stay on the Lite path. Role: admin.
 2. **Say what the bot is for.** ITSM, HR, or another line of business, and whether live agents are in scope. That answer is the plan. It is not a flowchart.
-3. **Activate** Glide Virtual Agent (`com.glide.cs.chatbot`) and the matching store conversations (ITSM Virtual Agent Conversations).
+3. **Activate, only if you hold the full license.** Glide Virtual Agent (`com.glide.cs.chatbot`) and the matching store conversations (ITSM Virtual Agent Conversations). Lite already has its ITSM conversations. Do not install the full plugin on a Standard instance.
 4. **Put it on one portal** and open `/sp` as a requester.
 5. **Publish** the greeting plus one real topic (for example Check ticket status). Save is not publish.
-6. **Watch it.** After people use it, open Conversational Analytics. That is the start of monitoring, not a later project.
+6. **Watch it, if you have the full product.** After people use it, open Conversational Analytics. Lite has no such dashboard. Until you upgrade, your check is the three test places: Home, Designer, and the portal.
 
 Skip mobile, Teams, custom branding, and extra languages until the portal conversation finishes a real request. Those are the same bot on more doors, not a second implementation.
 

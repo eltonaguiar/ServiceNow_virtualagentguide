@@ -2,6 +2,8 @@
 
 From plugin activation through continual monitoring. Each stage is the navigator path, the table or property that holds the setting, and the smallest thing that counts as done. Role is **admin** or **virtual_agent_admin**.
 
+The configuration to-dos follow [Virtual Agent implementation checklist — a deeper dive](https://www.servicenow.com/community/virtual-agent-nlu-articles/virtual-agent-implementation-checklist-a-deeper-dive/ta-p/2306564) by **Victor Chen** (ServiceNow, published 24 July 2022, edited 24 March 2023). A spreadsheet, *VA checklist - deeper dive.xlsx*, is attached on that article. This guide adds the navigator path. It is not a replacement for his write-up.
+
 The chat client is the Virtual Agent surface. It is not Agent Client Collector.
 
 ## 00 · Bare minimum to stand a bot up
@@ -64,6 +66,7 @@ Survey odds: `com.glide.cs.survey.probability` (0.33 means the feedback topic ap
 1. If the home page says Virtual Agent is not installed, select **Get Virtual Agent plugin**, then **Start install**.
 2. On the Applications page, Glide Virtual Agent (`com.glide.cs.chatbot`) is selected. Choose **Install/Update All**, then **Install**.
 3. Back on Home, select **Get ITSM plugin** (or HR) and **Opt-in** on the Store app. Repeat for Conversational Analytics if you will report later.
+4. Also install the store app **Omni-Experience Standard Feature Set**. Chen flags this next to the Virtual Agent plugins. It is the bundle behind the Conversational Interfaces admin console. Do not skip it because the Home page already looks finished.
 
 Same plugin if the Home tile is missing:
 
@@ -181,7 +184,28 @@ Greeting and promoted topics are not on the topic canvas:
 
 `All › Conversational Interfaces › Settings › Virtual Agent › Custom Greetings and Setup › Default chat experience`
 
-6. Set the Greeting topic, optionally the Search Fallback topic, and the Promoted Topics tab. Save. Re-open the portal and confirm the greeting and the new topic both appear.
+6. On **Default chat experience**, set these by name. They ship with the ITSM conversations app:
+   - **Greeting** — **Dynamic Greeting**. It addresses the user by name.
+   - **Fallback** — **Search Fallback**.
+   - If AI Search is on, use **AI Search - Fallback** instead, so a missed utterance returns search results rather than a dead end.
+   - **Promoted Topics** — pin one topic people already ask for. It shows on the greeting.
+7. Save. Re-open the portal and confirm the greeting uses the name, the promoted topic is visible, and a nonsense sentence hits search fallback rather than silence.
+
+### Topic Recommendations, then NLU
+
+`All › Conversational Interfaces › Virtual Agent › Topic Recommendations`
+
+1. Install **Topic Recommendations** (`sn_topic_recommend`). It needs NLU Workbench and the ITSM Virtual Agent Conversations app. The page stays empty until you define a report.
+2. Configure analysis on Incident, Request, live-agent transcripts, or Virtual Agent fallback utterances. Run it. You get a ranked list: topics Virtual Agent can already handle, and intents you would have to build.
+3. For a match, **duplicate** the prebuilt topic. Do not publish the suggestion in place. Test the copy, then publish.
+
+`All › Conversational Interfaces › Settings › Virtual Agent › NLU`
+
+Turn NLU on for topic discovery. Map one intent to each topic. Setup-topic NLU is `com.glide.cs.nlu.topics`. Keywords stay as the backup.
+
+### Where to test
+
+Chen’s three places, in this order: the preview on **Conversational Interfaces Home**, the preview inside **Designer**, then the **portal** as a requester. Designer-only is not done.
 
 ### Languages
 
@@ -215,6 +239,25 @@ Greeting and promoted topics are not on the topic canvas:
 1. Install the **Conversational Analytics** store app (`sn_ci_analytics`) if the dashboard tile is absent.
 2. Open the dashboard. Read four numbers on a schedule, not once: topics that run, topics that finish, topics that transfer, topics with no traffic.
 3. Rewrite or retire from that list, publish again, and read the same widgets after real use. Monitoring is that loop. A topic that only looks good in your test chats is not monitored.
+
+## 11 · Deeper-dive checklist
+
+Victor Chen’s to-dos, with the path under each one. He assumes the earlier readiness work is already done: Knowledge Base in shape, Service Catalog ready for the bot to order from, and a change process for what you publish.
+
+1. **Activate the Virtual Agent plugins.** `All › Conversational Interfaces › Home`. Glide Virtual Agent (`com.glide.cs.chatbot`), plus the **Omni-Experience Standard Feature Set** store app.
+2. **Add the bot to the web portal.** `All › Conversational Interfaces › Home › Add to portal`, or `All › Service Portal › Agent Chat` (`sp_agent_chat_config`). Open `/sp` as a requester.
+3. **Brand image and colors.** `All › Conversational Interfaces › Home › Set up branding`. Record on `sys_cs_branding_setup`. Apply the branding key or the portal still shows the default.
+4. **Teams or Slack, including notifications.** `All › Conversational Interfaces › Settings › Integrations`. Install the store integration, connect the tenant, then turn notifications on for that channel.
+5. **Conversational Analytics.** `All › Conversational Interfaces › Home`. Store app `sn_ci_analytics`. Open the dashboard and read it.
+6. **ITSM or HRSD conversations.** ServiceNow Store, then opt in. `sn_itsm_va` or the HRSD conversations app. Topics stay inactive until you publish them.
+7. **Topic Recommendations.** `All › Conversational Interfaces › Virtual Agent › Topic Recommendations` (`sn_topic_recommend`). Define a report, run it, duplicate a suggested topic, then test and publish the copy.
+8. **Greetings and setup topics.** `All › Conversational Interfaces › Settings › Virtual Agent › Custom Greetings and Setup`. Dynamic Greeting, Search Fallback or AI Search - Fallback, and one Promoted topic.
+9. **Agent Chat.** `All › Conversational Interfaces › Home › Agent Chat`. `com.glide.interaction.awa`, Live Agent Support published, an AWA queue, and the fulfiller UI on `sys_cs_live_agent_setup` set to Agent Workspace.
+10. **NLU.** `All › Conversational Interfaces › Settings › Virtual Agent › NLU`. One intent per topic. Setup-topic model is `com.glide.cs.nlu.topics`. Keywords remain the backup.
+11. **Create or duplicate a topic and publish.** `All › Collaboration › Virtual Agent › Designer`. `sys_cs_topic` needs Active and Published. Save is not publish.
+12. **Mobile.** `All › System Mobile › Mobile App Builder`. Chat launcher, context Global, on the Now Mobile homepage. Or `Assistants › Display experience › Mobile`.
+13. **Test in three places.** Home preview, then Designer preview, then the portal. Happy path, a nonsense utterance, an empty lookup, and the live-agent branch.
+14. **Localize, if you need another language.** `Designer › Manage languages`, or Dynamic Translation (`com.glide.cs.dynamic.translation.virtual_agent`). Re-test each language.
 
 ## Done when
 

@@ -45,6 +45,28 @@ Guided Setup does not install a generic checklist. A short survey reads your ent
 
 `All › Guided Setup › Conversational Interfaces Guided Setup`
 
+## ★ Major steps
+
+Start at **Conversational Interfaces Guided Setup**. The first page has three tabs. Answer all three before you pick Quick or Manual. Each answer adds or hides tasks.
+
+- **General Setup** — live agents, the bot, or both; who holds admin, virtual_agent_admin, and awa_admin; which channels; colors, logo, and the greeting lines.
+- **Virtual Agent Setup** — own words (NLU) or keywords, plus whether Topic Recommendations should suggest topics from real requests.
+- **Agent Chat Setup** — the live half: queues, assignment, and who is allowed to take a transferred chat.
+
+### Own words, or keywords
+
+If users should ask in their own words, pick an NLU provider and the languages you will support. You maintain the models. They are edited in Virtual Agent Designer or in NLU Workbench. You create and keep these three:
+
+- **Intent** — what the user is looking for. One intent per topic. Example: check the status of an incident.
+- **Utterance** — an example of how they might say it. “Where is my ticket?” and “status of INC0012345” are two utterances for that same intent.
+- **Entity** — the object or context the action needs. In that example, the incident number is the entity.
+
+If you skip NLU, discovery uses the **Keywords** on Topic Properties instead. Keywords do not replace intents. They are the fallback when there is no model for that language.
+
+### Topic Recommendations
+
+If you want the product to suggest topics, name the common tasks people already request (incidents, catalog items, service requests). Topic Recommendations analyzes that data and ranks topics worth publishing. It does not write the topic for you.
+
 ### Things to consider before you click through
 
 Answer these on the setup page before you pick Quick or Manual. The page has three tabs: **General Setup**, **Virtual Agent Setup**, and **Agent Chat Setup**. General Setup decides who is in scope, who is allowed to configure it, where users will reach it, and how it should look. The other two tabs ask the same kind of questions for the bot and for live chat. A wrong answer here hides tasks you will need later.

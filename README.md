@@ -4,6 +4,8 @@ From plugin activation through continual monitoring. Each stage is the navigator
 
 The configuration to-dos follow [Virtual Agent implementation checklist — a deeper dive](https://www.servicenow.com/community/virtual-agent-nlu-articles/virtual-agent-implementation-checklist-a-deeper-dive/ta-p/2306564) by **Victor Chen** (ServiceNow, published 24 July 2022, edited 24 March 2023). His workbook is in this repo as [VA checklist - deeper dive.xlsx](public/VA-checklist-deeper-dive.xlsx). The file properties list him as creator (25 July 2022). It has one sheet and three columns: the to-do, a docs link, and a Done checkbox. There are no extra rows beyond the list in section 11. This guide adds the navigator path. It is not a replacement for his write-up.
 
+For the project around those clicks, use the community [ITSM Pro VA Quick Start Guide with Service Portal or Microsoft Teams](https://www.servicenow.com/community/itsm-articles/itsm-pro-va-quick-start-guide-with-service-portal-or-microsoft/ta-p/2312069) (published 14 April 2021). The steps sit in the attached slide decks: initiate, plan, execute, deliver, and close, on Service Portal or Teams. The community page lists the author as Administrator. This brief does not invent a personal byline. It is one article in a series. Use the Back and Next links at the bottom of that page for the rest.
+
 The chat client is the Virtual Agent surface. It is not Agent Client Collector.
 
 ## 00 · Bare minimum to stand a bot up
@@ -297,7 +299,7 @@ Chen’s three places, in this order: the preview on **Conversational Interfaces
 
 ## 11 · Deeper-dive checklist
 
-Victor Chen’s to-dos, with the path under each one. The attached workbook is the same list, plus a docs link and a Done checkbox on each row. He assumes the earlier readiness work is already done: Knowledge Base in shape, Service Catalog ready for the bot to order from, and a change process for what you publish.
+Victor Chen’s to-dos, with the path under each one. The attached workbook is the same list, plus a docs link and a Done checkbox on each row. He assumes the earlier readiness work is already done: Knowledge Base in shape, Service Catalog ready for the bot to order from, and a change process for what you publish. The project sequence around this list is the [ITSM Pro VA Quick Start Guide with Service Portal or Microsoft Teams](https://www.servicenow.com/community/itsm-articles/itsm-pro-va-quick-start-guide-with-service-portal-or-microsoft/ta-p/2312069) (14 April 2021): initiate, plan, execute, deliver, and close. The steps are in the attached decks. The community lists the author as Administrator.
 
 1. **Activate the Virtual Agent plugins.** `All › Conversational Interfaces › Home`. Glide Virtual Agent (`com.glide.cs.chatbot`), plus the **Omni-Experience Standard Feature Set** store app.
 2. **Add the bot to the web portal.** `All › Conversational Interfaces › Home › Add to portal`, or `All › Service Portal › Agent Chat` (`sp_agent_chat_config`). Open `/sp` as a requester.

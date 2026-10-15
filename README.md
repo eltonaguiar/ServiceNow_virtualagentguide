@@ -1,10 +1,63 @@
 # Virtual Agent Implementation
 
-Click paths for the ServiceNow **Virtual Agent Implementation** course (Tokyo and later). Each stage is the navigator breadcrumb, then the fields you fill. Role is **admin** or **virtual_agent_admin** unless noted.
+From plugin activation through continual monitoring. Each stage is the navigator path, the table or property that holds the setting, and the smallest thing that counts as done. Role is **admin** or **virtual_agent_admin**.
 
-The chat client here is the Virtual Agent surface. It is not Agent Client Collector.
+The chat client is the Virtual Agent surface. It is not Agent Client Collector.
 
-## 01 · Install and verify plugins
+## 00 · Bare minimum to stand a bot up
+
+You do not design a custom conversation on day one. You need a license, one product choice, the core plugin, one portal, and at least one **published** topic. Unpublished topics are invisible.
+
+1. **License.** Virtual Agent needs ITSM Pro, HRSD Pro, or Enterprise (or the equivalent entitlement). ITSM Standard is Virtual Agent Lite, a smaller bot.
+2. **Say what the bot is for.** ITSM, HR, or another line of business, and whether live agents are in scope. That answer is the plan. It is not a flowchart.
+3. **Activate** Glide Virtual Agent (`com.glide.cs.chatbot`) and the matching store conversations (ITSM Virtual Agent Conversations).
+4. **Put it on one portal** and open `/sp` as a requester.
+5. **Publish** the greeting plus one real topic (for example Check ticket status). Save is not publish.
+6. **Watch it.** After people use it, open Conversational Analytics. That is the start of monitoring, not a later project.
+
+Skip mobile, Teams, custom branding, and extra languages until the portal conversation finishes a real request. Those are the same bot on more doors, not a second implementation.
+
+## 01 · Conversational Interfaces Guided Setup
+
+Guided Setup does not install a generic checklist. A short survey reads your entitlements and your answers, then builds the task list you actually see. Tasks sit in categories (plugins, chat clients, agent chat, and so on). Do them in the order shown.
+
+`All › Guided Setup › Conversational Interfaces Guided Setup`
+
+1. Select **Get Started**.
+2. Open **Customize your setup** and select **Configure**.
+3. Answer what kind of bot this is: ITSM, HR, ITBM, Field Service, and whether you also want **Workspace Agent Chat**. The task list drops work for products you did not select.
+4. Choose **Quick setup** or **Manual setup**, then **Continue**.
+5. Work the tasks top to bottom. Mark each one complete only after you have verified it (Designer opens, portal chat opens).
+
+**Quick setup** is the minimum steps for a basic agent: plugins, one portal, branding optional, prebuilt topics. Use it when you want a working bot this week and you will not hand-build every topic.
+
+**Manual setup** is the full list: every plugin, Virtual Agent, Agent Chat, Advanced Work Assignment, integrations, and notifications. Use it when you are implementing, not trialing. The course walks Manual so you see every task Quick would have hidden.
+
+The first block (install and enable) is once per instance. Come back to the rest when you add a portal, a language, or a channel. On an upgrade, Guided Setup keeps tasks you already finished. Work done before this guided setup existed has to be selected by hand.
+
+Home tiles are the same jobs without the survey: `All › Conversational Interfaces › Home`. Use Home when the guided list is already done and you are changing one thing.
+
+## 02 · The plan is not the if-then
+
+Yes, you need a plan of what the agent is allowed to do. That plan is a short list of jobs, not a script of every question.
+
+**Plan — what the bot may do.** Write the jobs before you open Designer: reset a password, check an incident, order a laptop. Each job becomes one topic. Anything not on the list stays unpublished, so the bot cannot start it. The survey in Guided Setup is this plan in product form (ITSM, and live agent or not).
+
+**Finding the topic is not if-then.** The user types a sentence. Virtual Agent matches **one intent per topic** (NLU) or the **Keywords** on Topic Properties. One match starts that topic. Several matches show a choice list. None runs the Fallback setup topic, or AI Search Fallback if you turned that on.
+
+Property `com.glide.cs.max_number_display_topics` is how many matches to show. Default is 3. Keywords are the backup when NLU finds nothing, too many intents, or the language has no NLU model.
+
+**If-then runs only after a topic has started.** Inside Designer, a **Decision** control branches on a value you already collected. Example: a Boolean “Add a comment?” If Yes, take the comment branch. If No, end. The Decision has no properties of its own. The condition sits on each branch (the first branch is labeled Always until you change it).
+
+That if-then never chooses which topic to open. It only steers a conversation that has already begun. Prebuilt ITSM topics already contain these branches. You write new ones only when a published topic does not cover the job.
+
+Setup topics are the frame around every job, not extra if-then: Greeting (Dynamic Greeting says the user’s name), Fallback, Anything Else, Closing, Survey, Live Agent Support. They are chosen on the chat experience, not discovered like a normal topic.
+
+`All › Conversational Interfaces › Settings › Virtual Agent › Custom Greetings and Setup`
+
+Survey odds: `com.glide.cs.survey.probability` (0.33 means the feedback topic appears in about a third of conversations). Topics live on `sys_cs_topic`. Both **Active** and **Published** must be true.
+
+## 03 · Install and verify plugins
 
 `All › Conversational Interfaces › Home`
 
@@ -21,7 +74,7 @@ Same plugin if the Home tile is missing:
 
 Also expect the web client (`com.glide.cs.sn-va-web-client-app`), Designer (`com.snc.conversation_builder`), branding (`com.glide.cs.branding`), and platform topics. Do not brand until Designer opens.
 
-## 02 · Brand the chat client
+## 04 · Brand the chat client
 
 `All › Conversational Interfaces › Home › Edit your bot's look and feel › Set up branding`
 
@@ -43,7 +96,7 @@ Same form the long way:
    - **Embedded page:** add `sysparm_branding_key=your_key` on the iframe `src`.
 5. Open the portal as a requester. Confirm header logo, bot avatar, and colors before you call branding done.
 
-## 03 · Enable the portal web client
+## 05 · Enable the portal web client
 
 `All › Conversational Interfaces › Home › Add your bot to a portal › Add to portal`
 
@@ -56,10 +109,10 @@ Same table without the tile:
 3. **Portals** — select the lock, then the search icon, and choose **Service Portal** (or Employee Center). Empty means every portal.
 4. **Order** — lowest number wins when two configs target the same portal. Only one config runs per portal.
 5. **Active** — selected. Inactive means the launcher never appears.
-6. Select **Submit** or **Update**.
+6. Select **Submit** or **Update**. The record is on `sp_agent_chat_config`.
 7. Open the portal (`/sp`) while logged in as a requester. The chat control should be on the page. Start a conversation and confirm the branding from the previous step.
 
-## 04 · iOS and Android
+## 06 · iOS and Android
 
 There is no separate Virtual Agent install per phone. Requesters use **Now Mobile** (Apple App Store and Google Play) against this instance. Branding you saved in Conversational Interfaces is what mobile uses. You do not recolor the bot inside Mobile App Builder.
 
@@ -76,7 +129,7 @@ If the instance uses assistants instead of the older launcher:
 
 Select the mobile chat function, save, and refresh the app.
 
-## 05 · Live agent handoff
+## 07 · Live agent handoff
 
 Three layers have to agree. A topic node alone does not route anyone.
 
@@ -103,7 +156,7 @@ Three layers have to agree. A topic node alone does not route anyone.
 2. On `sys_cs_live_agent_setup.list`, set **ITSM Fulfiller UI** and **Global Fulfiller UI** to **Agent Workspace**, not Connect. Save.
 3. Test twice: a topic that finishes in the bot, and a transfer that lands in Agent Workspace with the prior messages still on the interaction.
 
-## 06 · Pre-built messaging apps
+## 08 · Pre-built messaging apps
 
 `All › System Applications › All Available Applications › All`
 
@@ -114,7 +167,7 @@ Three layers have to agree. A topic node alone does not route anyone.
 2. Open the provider (Teams or Slack). Complete the tenant or workspace link the page asks for, and set the bot name and icon for that channel. Those are channel fields. They do not replace the branding record.
 3. Save. In the external app, send a phrase you know maps to a **published** topic. If the portal topic works and Teams does not, the topic is fine and the provider link is not.
 
-## 07 · Plan, build, test, publish
+## 09 · Build, test, publish, move
 
 `All › Collaboration › Virtual Agent › Designer`
 
@@ -145,7 +198,7 @@ Greeting and promoted topics are not on the topic canvas:
 2. **Complete** the set, then on the target instance use **Retrieved Update Sets › Import › Preview › Commit**.
 3. The topic can arrive while the portal config, branding key, queue, and Teams link stay behind. Repeat the portal, branding, and publish checks on the target. Then open the portal there.
 
-## 08 · Notifications and analytics
+## 10 · Notifications, then continual monitoring
 
 ### Notifications
 
@@ -160,8 +213,8 @@ Greeting and promoted topics are not on the topic canvas:
 `All › Conversational Interfaces › Home`
 
 1. Install the **Conversational Analytics** store app (`sn_ci_analytics`) if the dashboard tile is absent.
-2. Open the dashboard. Read four numbers before you edit anything: topics that run, topics that finish, topics that transfer, topics with no traffic.
-3. Rewrite or retire from that list. Then publish again and check the same widgets after real use, not after your own test chats only.
+2. Open the dashboard. Read four numbers on a schedule, not once: topics that run, topics that finish, topics that transfer, topics with no traffic.
+3. Rewrite or retire from that list, publish again, and read the same widgets after real use. Monitoring is that loop. A topic that only looks good in your test chats is not monitored.
 
 ## Done when
 

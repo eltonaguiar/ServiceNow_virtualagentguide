@@ -1,6 +1,6 @@
 # Virtual Agent Implementation
 
-From plugin activation through continual monitoring. Each stage is the navigator path, the table or property that holds the setting, and the smallest thing that counts as done. Role is **admin** or **virtual_agent_admin**.
+From plugin activation through continual monitoring. Each stage is the navigator path, the table or property that holds the setting, and the smallest thing that counts as done. Only **admin** can turn plugins and store apps on. After that, **virtual_agent_admin** builds the bot and **awa_admin** routes the live-agent handoff.
 
 The configuration to-dos follow [Virtual Agent implementation checklist — a deeper dive](https://www.servicenow.com/community/virtual-agent-nlu-articles/virtual-agent-implementation-checklist-a-deeper-dive/ta-p/2306564) by **Victor Chen** (ServiceNow, published 24 July 2022, edited 24 March 2023). His workbook is in this repo as [VA checklist - deeper dive.xlsx](public/VA-checklist-deeper-dive.xlsx). The file properties list him as creator (25 July 2022). It has one sheet and three columns: the to-do, a docs link, and a Done checkbox. There are no extra rows beyond the list in section 11. This guide adds the navigator path. It is not a replacement for his write-up.
 
@@ -19,6 +19,16 @@ Not every organization starts the same way. Match the license before you touch a
 **ITSM Standard, no full license.** Virtual Agent Lite is already on the instance (`com.glide.cs.chatbot.lite`). Do not install the full plugin. In Designer, review the prebuilt ITSM conversations, duplicate the ones you will use, and publish them.
 
 Lite is a smaller product: NLU is limited, and there is no Conversational Analytics dashboard. It is still a working chat you can put on a portal, and it is the base you upgrade from when the full license arrives.
+
+### Three roles, three jobs
+
+The **admin** role is required to activate plugins and store applications. A Virtual Agent admin or an AWA admin cannot do that step. Once the plugins are active, those two roles do the rest of the implementation. They are not extra people standing next to the bot. They own two different halves of it.
+
+- **admin** installs Glide Virtual Agent, the ITSM or HR conversations app, Agent Chat, Omni-Experience, Analytics, and Teams or Slack. On a domain-separated instance, do this from the global domain.
+- **virtual_agent_admin** is the bot builder. Designer, greetings, branding, NLU, the portal chat experience, and publish. This role does not activate plugins. Give it to the person who will change topics after go-live, instead of leaving them on admin.
+- **awa_admin** is the routing owner. A handover node only asks to transfer. Advanced Work Assignment decides which queue and which agent get the chat: service channel, queues, assignment rules, capacity, and presence. Path: `All › Advanced Work Assignment`. The person who answers the chat needs **awa_agent**, not awa_admin.
+
+One person who already has admin can do all three. The split matters when the bot builder is not the platform admin, and when the team that staffs live agents is not the team that writes topics.
 
 1. **Confirm which bot you have.** `All › System Definition › Plugins`. If Glide Virtual Agent is missing and Lite is active, stay on the Lite path. Role: admin.
 2. **Say what the bot is for.** ITSM, HR, or another line of business, and whether live agents are in scope. That answer is the plan. It is not a flowchart.
@@ -144,7 +154,7 @@ Select the mobile chat function, save, and refresh the app.
 
 ## 07 · Live agent handoff
 
-Three layers have to agree. A topic node alone does not route anyone.
+Three layers have to agree. A topic node alone does not route anyone. The Virtual Agent admin publishes the handoff topic. The AWA admin makes a queue that can receive it. The platform admin is the one who activated Agent Chat.
 
 ### Turn Agent Chat on
 
